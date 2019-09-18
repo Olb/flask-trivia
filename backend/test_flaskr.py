@@ -94,18 +94,6 @@ class TriviaTestCase(unittest.TestCase):
         self.assertTrue(data['categories'])
         self.assertEqual(data['count'], 6)
 
-    def test_delete_question_with_valid_id(self):
-        res = self.client().delete('/questions/17')
-
-        self.assertEqual(res.status_code, 200)
-
-    def test_delete_question_with_invalid_id(self):
-        res = self.client().delete('/questions/5000')
-        data = json.loads(res.data)
-
-        self.assertEqual(res.status_code, 404)
-        self.assertFalse(data['success'])
-
     def test_create_question(self):
         res = self.client().post('/questions', json=self.new_question)
         data = json.loads(res.data)
@@ -113,7 +101,7 @@ class TriviaTestCase(unittest.TestCase):
         self.assertEqual(res.status_code, 201)
         self.assertTrue(data['success'])
         self.assertTrue(data['questions'])
-        self.assertEqual(data['created'], 24)
+        self.assertTrue(data['created'])
         self.assertEqual(data['count'], 20)
 
     def test_create_question_already_exists(self):
@@ -124,6 +112,23 @@ class TriviaTestCase(unittest.TestCase):
         self.assertFalse(data['success'])
         self.assertEqual(data['error'], 409)
         self.assertEqual(data['message'], 'Question exists')
+
+    def test_delete_question_with_valid_id(self):
+        res = self.client().delete('/questions/5')
+
+        data = json.loads(res.data)
+
+        self.assertEqual(res.status_code, 200)
+        self.assertTrue(data['success'])
+        self.assertTrue(data['questions'])
+        self.assertEqual(data['count'], 19)
+
+    def test_delete_question_with_invalid_id(self):
+        res = self.client().delete('/questions/5000')
+        data = json.loads(res.data)
+
+        self.assertEqual(res.status_code, 404)
+        self.assertFalse(data['success'])
 
     def test_create_question_with_missing_params(self):
         question = {'question': {

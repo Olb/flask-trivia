@@ -72,7 +72,7 @@ def create_app(test_config=None):
         """
 
         category = Category.query.get(category_id)
-        selection = Question.query.filter_by(category=category.id)
+        selection = Question.query.filter_by(category=str(category.id))
         if not selection:
             abort(404)
         questions = [questions.format() for questions in selection]
@@ -148,7 +148,7 @@ def create_app(test_config=None):
                 answer_text = new_question['answer']
                 difficulty = new_question['difficulty']
                 category = new_question['category']
-            except:
+            except KeyError:
                 abort(422)
 
             existing_question = Question.query.filter_by(
@@ -162,7 +162,7 @@ def create_app(test_config=None):
                 question.insert()
                 selection = Question.query.all()
                 status_code = 201
-            except:
+            except KeyError:
                 abort(422)
         else:
             abort(422)
@@ -210,14 +210,14 @@ def create_app(test_config=None):
             abort(422)
         try:
             category_id = quiz_data['category_id']
-        except:
+        except KeyError:
             abort(422)
 
         if not category_id or category_id == "0":
             selection = Question.query.all()
             category = ""
         else:
-            category_query = Category.query.get(category_id)
+            category_query = Category.query.get(str(category_id))
             category = category_query.format()
             selection = Question.query.filter(
                 Question.category == category_id)
