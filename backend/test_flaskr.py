@@ -97,7 +97,7 @@ class TriviaTestCase(unittest.TestCase):
     def test_delete_question_with_valid_id(self):
         res = self.client().delete('/questions/17')
 
-        self.assertEqual(res.status_code, 204)
+        self.assertEqual(res.status_code, 200)
 
     def test_delete_question_with_invalid_id(self):
         res = self.client().delete('/questions/5000')

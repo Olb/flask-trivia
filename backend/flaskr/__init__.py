@@ -107,7 +107,7 @@ def create_app(test_config=None):
             'success': True,
             'questions': questions,
             'count': len(questions)
-        }), 204
+        }), 200
 
     @app.route('/questions', methods=['POST'])
     def post_questions():
@@ -189,7 +189,17 @@ def create_app(test_config=None):
 
     @app.route('/quizzes', methods=['POST'])
     def get_quizzes():
-        """Returns a quiz question or question from category ID."""
+        """Returns a quiz question or question from category ID.
+
+        A quiz question is returned by randomly selecting a
+        question from a list of questions that have not
+        been shown before for this game.
+
+        JSON Accepted values:
+        quiz -- An object that holds a category ID and previous questions
+        category_id -- The ID for a category
+        previous_questions -- A list of previous questions ID's or empty list
+        """
 
         body = request.get_json()
 
@@ -215,7 +225,7 @@ def create_app(test_config=None):
         questions = [question.format() for question in selection[:5]
                      if question.id not in previous_questions]
         if questions:
-            question = questions[0]
+            question = questions[randnt(0, len(questions))]
         else:
             question = None
         return jsonify({
