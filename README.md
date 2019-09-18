@@ -118,7 +118,7 @@ Error are returned as JSON objects in the following format
 ```
 {
 'message':'Bad request',
-error: 400,
+'error': 400,
 'success':False
 }
 ```
@@ -338,7 +338,7 @@ The API will return four error types when requests fail:
 #### DELETE /questions/{question_id}
 
 - General:
-  - Deletes q question with the provided ID. Returns the success value, a list of
+  - Deletes a question with the provided ID. Returns the success value, a list of
     all questions remaining after the delete, and a count of the questions.
 - Sample: `curl -X DELETE http://127.0.0.1:5000/questions/2`
 
