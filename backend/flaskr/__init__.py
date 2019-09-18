@@ -2,7 +2,7 @@ import os
 from flask import Flask, request, abort, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
-import random
+from random import randint
 
 from models import setup_db, Question, Category
 
@@ -189,15 +189,17 @@ def create_app(test_config=None):
 
     @app.route('/quizzes', methods=['POST'])
     def get_quizzes():
-        """Returns a quiz question or question from category ID.
+        """Returns a quiz question.
 
         A quiz question is returned by randomly selecting a
         question from a list of questions that have not
-        been shown before for this game.
+        been shown before for this game. If not category ID
+        is provided a random question from all questions returned
+        else a question is returned from the category requested.
 
         JSON Accepted values:
         quiz -- An object that holds a category ID and previous questions
-        category_id -- The ID for a category
+        category_id -- The ID for a category requested
         previous_questions -- A list of previous questions ID's or empty list
         """
 
@@ -225,7 +227,7 @@ def create_app(test_config=None):
         questions = [question.format() for question in selection[:5]
                      if question.id not in previous_questions]
         if questions:
-            question = questions[randnt(0, len(questions))]
+            question = questions[randint(0, len(questions)-1)]
         else:
             question = None
         return jsonify({
